@@ -29,13 +29,12 @@ def get_ai_response(user_message):
 
         completion = client.chat.completions.create(
         model="gpt-4o-mini",  # e.g. gpt-35-instant
-        prompt = user_message
-        #messages=[
-        #    {
-        #        "role": "user",
-        #        "content": "Give me a single short riddle",
-        #    },
-        #],
+        messages=[
+            {
+                "role": "user",
+                "content": user_message,
+            },
+        ],
         )
         return completion.choices[0].text.strip()
     except Exception as e:
