@@ -30,6 +30,7 @@ def get_ai_response(user_message):
 
         completion = client.chat.completions.create(
         model="gpt-4o-mini",  # e.g. gpt-35-instant
+        max_tokens = 100,
         messages=[
             {
                 "role": "user",
