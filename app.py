@@ -1,7 +1,6 @@
 from openai import AzureOpenAI
 from flask import Flask, request, jsonify
 import json
-from IPython.display import display, Markdown
 
 
 app = Flask(__name__)
