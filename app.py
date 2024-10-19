@@ -36,7 +36,7 @@ def get_ai_response(user_message):
             },
         ],
         )
-        return completion.choices[0].text.strip()
+        return completion.choices[0].message.content
     except Exception as e:
         return "Sorry, I encountered an error."
 
