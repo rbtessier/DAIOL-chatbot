@@ -1,10 +1,11 @@
 from openai import AzureOpenAI
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import json
 
 
 app = Flask(__name__)
-
+CORS(app)
 # Set up OpenAI API connection (using environment variables for security)
 
 @app.route("/api/chat", methods=["POST"])
