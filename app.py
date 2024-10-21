@@ -12,7 +12,6 @@ user_sessions = {}
 def start_session():
     # Generate a new session token
     session_token = str(uuid.uuid4())
-    
     # Initialize an empty conversation history for this token
     user_sessions[session_token] = []
     
