@@ -1,7 +1,7 @@
 from openai import AzureOpenAI
 from flask import Flask, request, jsonify
 import json
-import uuid
+from uuid import uuid4
 
 app = Flask(__name__)
 
@@ -11,7 +11,7 @@ user_sessions = {}
 @app.route("/api/start", methods=["GET"])
 def start_session():
     # Generate a new session token
-    session_token = str(uuid.uuid4())
+    session_token = str(uuid4())
     # Initialize an empty conversation history for this token
     user_sessions[session_token] = []
     
