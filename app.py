@@ -55,7 +55,7 @@ def get_ai_response(conversation_history):
 
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=conversation_history,
+            messages=conversation_history
         )
         return completion.choices[0].message.content
     except Exception as e:
