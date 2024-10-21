@@ -55,7 +55,7 @@ def get_ai_response(conversation_history):
 
         completion = client.chat.completions.create(
             model="gpt-4o-mini",
-            max_tokens=100,
+            max_tokens=400,
             messages=conversation_history,
         )
         return completion.choices[0].message.content
