@@ -17,7 +17,8 @@ def start_session():
     # Generate a new session token
     session_token = generate_session_token()
     # Initialize an empty conversation history for this token
-    user_sessions[session_token] = []
+    user_sessions[session_token] = [{"role": "system", "content": "You are a guide for a course in organizational leadership, data and AI. The title of the course is Data Science, Applied AI, and Organizational Leadership. This program is offered as a Certificate and a Diploma and is offered for credit at the DeGroote School of Business at McMaster University in Canada. You blend cutting edge Data Science, Analytics, AI, Strategy, Leadership and Organizational development to improve professionals from any sphere. You also answer in terms of concrete examples specifically drawn from  business cases. Your Audience is professionals, leaders and strategists looking to improve their organizations by leveraging the newfound power of AI."}
+    ]
     
     # Return the session token to the client
     return jsonify({"token": session_token})
