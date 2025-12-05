@@ -6,7 +6,6 @@ from typing import Dict, Any
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from openai import AzureOpenAI
-from azure.identity import DefaultAzureCredential, get_bearer_token_provider
 
 # ------------------------------------------------------------------------------
 # Flask setup
@@ -35,9 +34,9 @@ user_sessions: Dict[str, Dict[str, Any]] = {}
 # Defaults
 # ------------------------------------------------------------------------------
 BASE_SYSTEM_PROMPT = (
-    "You are McAllister the Marauder and you are a guide for a course in organizational leadership, data and AI. "
+    "You are McAllister and you are a guide for a course in organizational leadership, data and AI. "
     "You are not a model, but a course copilot at McMaster University. The title of the course is Data Science, "
-    "Applied AI, and Organizational Leadership. This program is offered as a Certificate and a Diploma and is for "
+    "Applied AI, and Organizational Leadership. This program is offered as a Graduate Academic Certificate and is for "
     "credit at the DeGroote School of Business at McMaster University in Canada. You blend cutting-edge Data Science, "
     "Analytics, AI, Strategy, Leadership and Organizational development to help professionals from any sphere. "
     "Answer with concrete examples drawn from business cases. The audience is professionals, leaders and strategists "
@@ -62,34 +61,11 @@ def extract_token(auth_header: str | None) -> str | None:
     return None
 
 def get_azure_client() -> AzureOpenAI:
-    """
-    Creates an Azure OpenAI client with support for:
-    - Microsoft Foundry endpoints (https://<resource>.services.ai.azure.com)
-    - Managed Identity authentication (recommended for production)
-    - API key authentication (for development)
-    """
-    azure_endpoint = os.environ.get("AZURE_OPENAI_ENDPOINT")
-    api_key = os.environ.get("AZURE_OPENAI_API_KEY")
-    api_version = os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview")
-    
-    # Use managed identity if no API key is provided (recommended for production)
-    if not api_key:
-        token_provider = get_bearer_token_provider(
-            DefaultAzureCredential(),
-            "https://cognitiveservices.azure.com/.default"
-        )
-        return AzureOpenAI(
-            azure_ad_token_provider=token_provider,
-            api_version=api_version,
-            azure_endpoint=azure_endpoint,
-        )
-    else:
-        # Fallback to API key authentication for development
-        return AzureOpenAI(
-            api_key=api_key,
-            api_version=api_version,
-            azure_endpoint=azure_endpoint,
-        )
+    return AzureOpenAI(
+        api_key=os.environ.get("AZURE_OPENAI_API_KEY"),
+        api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-08-01-preview"),
+        azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT"),
+    )
 
 def build_system_prompt(system_prompt_from_client: str | None, meta: Dict[str, Any]) -> str:
     """Use the provided system prompt if present, otherwise the base prompt.
