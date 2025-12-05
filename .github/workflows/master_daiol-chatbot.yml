@@ -10,6 +10,10 @@ on:
       - master
   workflow_dispatch:
 
+concurrency:
+  group: daiol-chatbot-deployment
+  cancel-in-progress: false
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -75,4 +79,9 @@ jobs:
         with:
           app-name: 'daiol-chatbot'
           slot-name: 'Production'
+          clean: true
+          restart: true
+          
+      - name: Wait for deployment to stabilize
+        run: sleep 30
           
