@@ -134,7 +134,7 @@ def start_session():
     user_sessions[token] = {
         "messages": [{"role": "system", "content": system_prompt}],
         "meta": meta,
-        "model": os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-4o-mini"),
+        "model": os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-5-mini"),
         "default_temperature": float(os.environ.get("DEFAULT_TEMPERATURE", "0.2")),
         "default_max_tokens": int(os.environ.get("DEFAULT_MAX_TOKENS", "512")),
     }
