@@ -148,7 +148,8 @@ def chat():
     Body JSON:
       - message        (required)
       - temperature    (optional float)
-      - max_tokens     (optional int)
+            - max_tokens     (optional int, legacy)
+            - max_completion_tokens (optional int, preferred)
       - context        (optional str) -> transient, injected as a one-off system note
     Header:
       - Authorization: <token> OR Authorization: Bearer <token>
@@ -167,6 +168,7 @@ def chat():
 
     temperature = data.get("temperature", user_sessions[token]["default_temperature"])
     max_tokens = data.get("max_tokens", user_sessions[token]["default_max_tokens"])
+    max_completion_tokens = data.get("max_completion_tokens", max_tokens)
     per_request_context = data.get("context")
 
     session = user_sessions[token]
@@ -187,7 +189,7 @@ def chat():
             model=session["model"],                 # Azure deployment name
             messages=session["messages"],           # full history
             temperature=float(temperature),
-            max_tokens=int(max_tokens),
+            max_completion_tokens=int(max_completion_tokens),
         )
         response_text = completion.choices[0].message.content
 
