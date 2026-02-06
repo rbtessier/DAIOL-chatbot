@@ -63,7 +63,7 @@ def extract_token(auth_header: str | None) -> str | None:
 def get_azure_client() -> AzureOpenAI:
     return AzureOpenAI(
         api_key=os.environ.get("AZURE_OPENAI_API_KEY"),
-        api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-12-01-preview"),
+        api_version=os.environ.get("AZURE_OPENAI_API_VERSION", "2024-10-21"),
         azure_endpoint=os.environ.get("AZURE_OPENAI_ENDPOINT"),
     )
 
