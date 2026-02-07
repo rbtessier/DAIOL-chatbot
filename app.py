@@ -25,7 +25,7 @@ app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=12)
 #   "messages": [{"role": "...", "content": "..."}],
 #   "meta": {"userName": "...", "cohortId": "...", "systemPrompt": "...", "initialMessage": "..."},
 #   "model": "deployment-name",
-#   "default_temperature": 0.2,
+#   "default_temperature": 1.0,
 #   "default_max_completion_tokens": 512,
 # }
 user_sessions: Dict[str, Dict[str, Any]] = {}
@@ -135,7 +135,7 @@ def start_session():
         "messages": [{"role": "system", "content": system_prompt}],
         "meta": meta,
         "model": os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-5-mini"),
-        "default_temperature": float(os.environ.get("DEFAULT_TEMPERATURE", "0.2")),
+        "default_temperature": float(os.environ.get("DEFAULT_TEMPERATURE", "1.0")),
         "default_max_completion_tokens": int(os.environ.get("DEFAULT_MAX_COMPLETION_TOKENS", "512")),
     }
 
@@ -147,7 +147,7 @@ def chat():
     """
     Body JSON:
       - message        (required)
-      - temperature    (optional float)
+            - temperature    (optional float, gpt-5 defaults to 1.0)
         - max_completion_tokens (optional int)
       - context        (optional str) -> transient, injected as a one-off system note
     Header:
