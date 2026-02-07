@@ -26,7 +26,7 @@ app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=12)
 #   "meta": {"userName": "...", "cohortId": "...", "systemPrompt": "...", "initialMessage": "..."},
 #   "model": "deployment-name",
 #   "default_temperature": 0.2,
-#   "default_max_tokens": 512,
+#   "default_max_completion_tokens": 512,
 # }
 user_sessions: Dict[str, Dict[str, Any]] = {}
 
@@ -136,7 +136,7 @@ def start_session():
         "meta": meta,
         "model": os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-5-mini"),
         "default_temperature": float(os.environ.get("DEFAULT_TEMPERATURE", "0.2")),
-        "default_max_tokens": int(os.environ.get("DEFAULT_MAX_TOKENS", "512")),
+        "default_max_completion_tokens": int(os.environ.get("DEFAULT_MAX_COMPLETION_TOKENS", "512")),
     }
 
     # Return token and initial message (frontend renders welcome without burning tokens)
@@ -148,8 +148,7 @@ def chat():
     Body JSON:
       - message        (required)
       - temperature    (optional float)
-            - max_tokens     (optional int, legacy)
-            - max_completion_tokens (optional int, preferred)
+        - max_completion_tokens (optional int)
       - context        (optional str) -> transient, injected as a one-off system note
     Header:
       - Authorization: <token> OR Authorization: Bearer <token>
@@ -167,8 +166,10 @@ def chat():
         return jsonify({"error": "Missing 'message'"}), 400
 
     temperature = data.get("temperature", user_sessions[token]["default_temperature"])
-    max_tokens = data.get("max_tokens", user_sessions[token]["default_max_tokens"])
-    max_completion_tokens = data.get("max_completion_tokens", max_tokens)
+    max_completion_tokens = data.get(
+        "max_completion_tokens",
+        user_sessions[token]["default_max_completion_tokens"],
+    )
     per_request_context = data.get("context")
 
     session = user_sessions[token]
