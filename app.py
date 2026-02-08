@@ -192,7 +192,21 @@ def chat():
             temperature=float(temperature),
             max_completion_tokens=int(max_completion_tokens),
         )
-        response_text = completion.choices[0].message.content
+        response_text = ""
+        if completion.choices:
+            response_text = completion.choices[0].message.content or ""
+        if not response_text.strip():
+            try:
+                choice = completion.choices[0] if completion.choices else None
+                print("Empty model response", {
+                    "finish_reason": getattr(choice, "finish_reason", None),
+                    "has_tool_calls": bool(getattr(getattr(choice, "message", None), "tool_calls", None)),
+                    "usage": getattr(completion, "usage", None),
+                    "model": session.get("model"),
+                })
+            except Exception as log_error:
+                print("Empty model response (log failure)", repr(log_error))
+            response_text = "Sorry, I didn't receive a response from the model. Please try again."
 
         # Append assistant reply to history
         session["messages"].append({"role": "assistant", "content": response_text})
