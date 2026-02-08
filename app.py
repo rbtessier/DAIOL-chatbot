@@ -136,7 +136,7 @@ def start_session():
         "meta": meta,
         "model": os.environ.get("AZURE_OPENAI_DEPLOYMENT", "gpt-5-mini"),
         "default_temperature": float(os.environ.get("DEFAULT_TEMPERATURE", "1.0")),
-        "default_max_completion_tokens": int(os.environ.get("DEFAULT_MAX_COMPLETION_TOKENS", "512")),
+        "default_max_completion_tokens": int(os.environ.get("DEFAULT_MAX_COMPLETION_TOKENS", "2048")),
     }
 
     # Return token and initial message (frontend renders welcome without burning tokens)
